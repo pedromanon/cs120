@@ -42,10 +42,12 @@ def QuickSelect(arr, i):
         less = [x for x in arr if x[0] < p]
         more = [x for x in arr if x[0] > p]
         equal = [x for x in arr if x[0] == p]
-        if i < len(less):
+        nless = len(less)
+        nequal = len(equal)
+        if i < nless:
             return QuickSelect(less, i)
-        elif i >= len(less) + len(equal):
-            return QuickSelect(more, i - (len(less) + len(equal)))
+        elif i >= nless + nequal:
+            return QuickSelect(more, i - (nless + nequal))
         else:
             return equal[0]
 
@@ -65,10 +67,11 @@ NOTE: This is different from the QuickSelect definition. This function takes in 
 def MergeSortSelect(arr, query_list):
     # Only call MergeSort once
     # ... MergeSort has already been implemented for you (see below)
-    ret = []
+    nlist = MergeSort(arr)
+    flist = []
     for i in query_list:
-        ret.append(QuickSelect(arr,i))
-    return ret
+        flist.append(nlist[i])
+    return flist
 
 
 ##################################
@@ -80,7 +83,8 @@ def MergeSortSelect(arr, query_list):
 
 def experiments():
     # Edit this parameter
-    k = [1, 1, 1, 1, 1]
+    r = 40
+    k = [r, r + 1, r + 2, r + 3, r + 4, r + 5]
 
     # Feel free to edit these initial parameters
 
