@@ -129,7 +129,22 @@ def bfs_2_coloring(G, precolored_nodes=None):
     
     # TODO: Complete this function by implementing two-coloring using the colors 0 and 1.
     # If there is no valid coloring, reset all the colors to None using G.reset_colors()
-    
+    for u in range(G.N):
+        if u not in visited:
+            for v in G.edges[u]:
+                if G.colors[u] is None and G.colors[v] is None:
+                    G.colors[u] = 0
+                    G.colors[v] = 1
+                elif G.colors[u] is None and G.colors[v] != 0:
+                    G.colors[u] = 0
+                elif G.colors[u] is None and G.colors[v] != 1:
+                    G.colors[u] = 1
+                elif G.colors[u] != 0 and G.colors[v] is None:
+                    G.colors[v] = 0
+                elif G.colors[u] != 1 and G.colors[v] is None:
+                    G.colors[v] = 1
+    if G.is_graph_coloring_valid():
+        return G.colors
     G.reset_colors()
     return None
 
@@ -141,7 +156,12 @@ def bfs_2_coloring(G, precolored_nodes=None):
 # Checks if subset is an independent set in G 
 def is_independent_set(G, subset):
     # TODO: Complete this function
-
+    edgenodes = []
+    for u in subset:
+        if u in edgenodes:
+            return False
+        for v in G.edges[u]:
+            edgenodes.append(v)
     return True
 
 '''
@@ -169,7 +189,15 @@ def is_independent_set(G, subset):
 # If no coloring is possible, resets all of G's colors to None and returns None.
 def iset_bfs_3_coloring(G):
     # TODO: Complete this function.
+    for i in range(int(G.N/3)):
+        for subset in combinations(range(G.N), i + 1):
+            if is_independent_set(G, subset):
+                if bfs_2_coloring(G, subset) is not None:
+                    return G.colors
 
+    bfs_2_coloring(G, None)
+    if G.is_graph_coloring_valid():
+        return G.colors
     G.reset_colors()
     return None
 
